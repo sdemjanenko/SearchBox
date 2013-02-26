@@ -5,18 +5,17 @@ var SearchBox = (function($, _) {
   };
 
   var ctor = function(input, options) {
-    var $input = $(input);
-    this.input = $input;
-
-    this.options = _.extend({}, defaults, options);
     this.data = [];
     this.result = [];
     this.value = '';
+    this.input = $(input);
+
+    this.options = _.extend({}, defaults, options);
 
     _.bindAll(this);
-    $input.on('input', this.inputQuery);
+    this.input.on('input', _.debounce(this.updateQueryFromInput, this.options.timeout));
     $(this).on('change:value', function(e, val) { // update the input element's value if querying from the JS
-      $input.val(val);
+      this.input.val(val);
     });
     $(this).on('change:data change:value', this.run);
 
@@ -24,18 +23,11 @@ var SearchBox = (function($, _) {
   };
 
   ctor.prototype = {
-    inputQuery: function() {
-      clearTimeout(this.timeout);
-      this.timeout = setTimeout(this.updateQueryFromInput, this.options.timeout);
-    },
     updateQueryFromInput: function() {
-      this.set('value', this.input.val());
+      this.query(this.input.val());
     },
     query: function(new_value) {
       this.set('value', new_value);
-    },
-    setData: function(new_data) {
-      this.set('data', new_data);
     },
     set: function(attr, val) {
       this[attr] = val;

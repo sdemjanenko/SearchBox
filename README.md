@@ -13,8 +13,8 @@ Add an input element
 You can set/change the data that the search is run on.
 One may want to update the data set whenever new data is obtained from the server
 
-    aSearchBox.setData(['one', 'two', 'three']);
-    aSearchBox.setData([{"dog": "cat"}, {"plane": "boat"}, {"sun": "moon"}]);
+    aSearchBox.set('data', ['one', 'two', 'three']);
+    aSearchBox.set('data', [{"dog": "cat"}, {"plane": "boat"}, {"sun": "moon"}]);
 
 ### Query
 The SearchBox can be queried directly from the JS
@@ -36,6 +36,13 @@ The function used for searching can be customized.  The default search assumes a
         return key.indexOf(term) !== -1;
       });
     }
+
+### Events
+You can listen to events on $(aSearchBox) for anything that gets set. I find it super
+useful to listen for 'change:result' events which happen whenever a new search result
+is obtained
+
+    $(aSearchBox).on('change:result', function(e, val) { console.log('new result', val);})
 
 ## Dependencies
 - jQuery
